@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI研修 | 現場で使えるAIを、あなたのチームに。</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --black2: #0a0a0a;
+      --black3: #111111;
+      --white: #ffffff;
+      --gray: #999999;
+      --gray-light: #cccccc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 8px 20px;
+      transition: all 0.3s;
+    }
+
+    .nav-cta:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 0 48px 100px;
+      position: relative;
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(255,255,255,0.03) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(255,255,255,0.02) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 900px; }
+
+    .hero-label {
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(56px, 9vw, 108px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+
+    .hero-title span { display: block; }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.8;
+      margin-bottom: 56px;
+      max-width: 520px;
+    }
+
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--white);
+      color: var(--black);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 16px 40px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover { background: var(--gray-light); }
+
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 16px 40px;
+      border: 1px solid rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover { border-color: var(--white); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      right: 48px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-scroll::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gray);
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section { padding: 140px 48px; }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.9;
+      max-width: 600px;
+      margin-bottom: 80px;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ===== PROBLEM ===== */
+    #problem { background: var(--black2); }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 64px;
+    }
+
+    .problem-item {
+      background: var(--black2);
+      padding: 48px 40px;
+    }
+
+    .problem-num {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--gray);
+      margin-bottom: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .problem-text {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    /* ===== SOLUTION ===== */
+    #solution { background: var(--black); }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      margin-top: 64px;
+    }
+
+    .solution-item {
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
+
+    .solution-num {
+      font-size: 48px;
+      font-weight: 900;
+      font-family: 'Inter', sans-serif;
+      color: rgba(255,255,255,0.08);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .solution-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .solution-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.8;
+    }
+
+    /* ===== USE CASE ===== */
+    #usecase { background: var(--black3); }
+
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 64px;
+    }
+
+    .usecase-item {
+      background: var(--black3);
+      padding: 40px;
+      transition: background 0.3s;
+    }
+
+    .usecase-item:hover { background: #1a1a1a; }
+
+    .usecase-dept {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 16px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .usecase-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .usecase-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.8;
+    }
+
+    /* ===== FLOW ===== */
+    #flow { background: var(--black); }
+
+    .flow-list {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 48px;
+      padding: 48px 0;
+      border-top: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .flow-item:last-child { border-bottom: 1px solid var(--line); }
+
+    .flow-num {
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      padding-top: 4px;
+    }
+
+    .flow-content {}
+
+    .flow-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .flow-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.8;
+    }
+
+    /* ===== FAQ ===== */
+    #faq { background: var(--black2); }
+
+    .faq-list {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      border-top: 1px solid var(--line);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .faq-item:last-child { border-bottom: 1px solid var(--line); }
+
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 36px 0;
+      cursor: pointer;
+      gap: 24px;
+    }
+
+    .faq-q-text {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+
+    .faq-icon::before,
+    .faq-icon::after {
+      content: '';
+      position: absolute;
+      background: var(--white);
+      transition: transform 0.3s;
+    }
+
+    .faq-icon::before {
+      width: 100%; height: 1px;
+      top: 50%; left: 0;
+      transform: translateY(-50%);
+    }
+
+    .faq-icon::after {
+      width: 1px; height: 100%;
+      left: 50%; top: 0;
+      transform: translateX(-50%);
+    }
+
+    .faq-item.open .faq-icon::after {
+      transform: translateX(-50%) rotate(90deg);
+      opacity: 0;
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+    }
+
+    .faq-a-inner {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.9;
+      padding-bottom: 36px;
+    }
+
+    .faq-item.open .faq-a { max-height: 300px; }
+
+    /* ===== CTA ===== */
+    #cta {
+      background: var(--black);
+      text-align: center;
+      padding: 160px 48px;
+    }
+
+    #cta .section-title { margin-bottom: 24px; }
+
+    #cta .section-sub {
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+
+    #cta .hero-buttons { justify-content: center; }
+
+    .cta-note {
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--gray);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--line);
+      padding: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--gray);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.05em;
+      width: 100%;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      section { padding: 100px 24px; }
+      #hero { padding: 0 24px 80px; }
+      .hero-scroll { right: 24px; }
+      footer { padding: 32px 24px; }
+      .flow-item { grid-template-columns: 48px 1fr; gap: 24px; }
+      #cta { padding: 120px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">AI Training</a>
+  <a href="#cta" class="nav-cta">無料相談</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-label">Enterprise AI Training</p>
+    <h1 class="hero-title">
+      <span>AIを、</span>
+      <span>現場に。</span>
+    </h1>
+    <p class="hero-sub">
+      難しい話は要りません。<br>
+      明日から使える体験を、あなたのチームに。
+    </p>
+    <div class="hero-buttons">
+      <a href="#cta" class="btn-primary">無料相談を申し込む</a>
+      <a href="#cta" class="btn-secondary">資料をダウンロード</a>
+    </div>
+  </div>
+  <p class="hero-scroll">Scroll</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <p class="section-label">Problem</p>
+  <h2 class="section-title">こんな声が<br>届いています。</h2>
+  <p class="section-sub">
+    多くの企業が、AI活用を試みながらも<br>
+    同じ壁にぶつかっています。
+  </p>
+  <div class="problem-grid">
+    <div class="problem-item">
+      <p class="problem-num">01</p>
+      <p class="problem-text">「AIって結局、<br>自分たちには<br>関係ない気がする」</p>
+    </div>
+    <div class="problem-item">
+      <p class="problem-num">02</p>
+      <p class="problem-text">「ツールは入れたけど、<br>誰も使っていない」</p>
+    </div>
+    <div class="problem-item">
+      <p class="problem-num">03</p>
+      <p class="problem-text">「何から始めれば<br>いいか分からない」</p>
+    </div>
+    <div class="problem-item">
+      <p class="problem-num">04</p>
+      <p class="problem-text">「研修したけど<br>現場に定着<br>しなかった」</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <p class="section-label">Solution</p>
+  <h2 class="section-title">3つの変化が<br>起きます。</h2>
+  <p class="section-sub">
+    「知っている」ではなく「使っている」状態へ。<br>
+    現場に根付くAI活用を設計します。
+  </p>
+  <div class="solution-grid">
+    <div class="solution-item">
+      <p class="solution-num">01</p>
+      <h3 class="solution-title">使える人が増える</h3>
+      <p class="solution-desc">AIツールを実際に操作し、業務に組み込む感覚を掴みます。「自分でもできる」という手応えから始めます。</p>
+    </div>
+    <div class="solution-item">
+      <p class="solution-num">02</p>
+      <h3 class="solution-title">現場に定着する</h3>
+      <p class="solution-desc">「知っている」ではなく「使っている」状態をつくります。業務フローへの組み込み方まで一緒に設計します。</p>
+    </div>
+    <div class="solution-item">
+      <p class="solution-num">03</p>
+      <h3 class="solution-title">自社で展開できる</h3>
+      <p class="solution-desc">研修後、社内で広げるためのステップが分かります。外部依存ではなく、自走できる体制をつくります。</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- USE CASE -->
+<section id="usecase">
+  <p class="section-label">Use Case</p>
+  <h2 class="section-title">あなたの業務に、<br>どう使えるか。</h2>
+  <p class="section-sub">
+    業種・規模・役職を問わず、<br>
+    すぐに使える場面があります。
+  </p>
+  <div class="usecase-grid">
+    <div class="usecase-item">
+      <p class="usecase-dept">営業</p>
+      <h3 class="usecase-title">提案資料・商談準備</h3>
+      <p class="usecase-desc">提案書の下書き生成、顧客ヒアリングメモの整理、競合調査の効率化。</p>
+    </div>
+    <div class="usecase-item">
+      <p class="usecase-dept">事務・総務</p>
+      <h3 class="usecase-title">議事録・メール対応</h3>
+      <p class="usecase-desc">会議の議事録自動生成、定型メールのテンプレート化、書類整理の効率化。</p>
+    </div>
+    <div class="usecase-item">
+      <p class="usecase-dept">採用・人事</p>
+      <h3 class="usecase-title">採用フローの効率化</h3>
+      <p class="usecase-desc">求人票の作成・改善、面接質問の設計、応募者への返信文の生成。</p>
+    </div>
+    <div class="usecase-item">
+      <p class="usecase-dept">マーケティング</p>
+      <h3 class="usecase-title">コンテンツ制作</h3>
+      <p class="usecase-desc">SNS投稿の下書き、LP文章の生成、広告コピーのアイデア出し。</p>
+    </div>
+    <div class="usecase-item">
+      <p class="usecase-dept">現場・製造</p>
+      <h3 class="usecase-title">マニュアル・報告書</h3>
+      <p class="usecase-desc">業務マニュアルのテンプレート化、日報・報告書のフォーマット生成。</p>
+    </div>
+    <div class="usecase-item">
+      <p class="usecase-dept">経営・企画</p>
+      <h3 class="usecase-title">情報収集・資料整理</h3>
+      <p class="usecase-desc">業界トレンドの調査補助、企画書の構成案生成、会議資料の整理。</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FLOW -->
+<section id="flow">
+  <p class="section-label">Flow</p>
+  <h2 class="section-title">始め方は、<br>シンプルです。</h2>
+  <p class="section-sub">
+    大がかりな準備は要りません。<br>
+    1回の相談から始められます。
+  </p>
+  <div class="flow-list">
+    <div class="flow-item">
+      <p class="flow-num">STEP 01</p>
+      <div class="flow-content">
+        <h3 class="flow-title">無料相談（30分）</h3>
+        <p class="flow-desc">現在の状況・課題・チームの規模をヒアリングします。この段階での費用は一切かかりません。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <p class="flow-num">STEP 02</p>
+      <div class="flow-content">
+        <h3 class="flow-title">プログラム設計</h3>
+        <p class="flow-desc">業種・規模・目的に合わせてカスタマイズします。汎用パッケージではなく、御社の現場に合わせた設計を行います。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <p class="flow-num">STEP 03</p>
+      <div class="flow-content">
+        <h3 class="flow-title">研修実施</h3>
+        <p class="flow-desc">1回から対応可能。オンライン・対面どちらにも対応しています。少人数から全社展開まで規模を問いません。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <p class="flow-num">STEP 04</p>
+      <div class="flow-content">
+        <h3 class="flow-title">フォローアップ</h3>
+        <p class="flow-desc">研修後の定着状況を確認し、必要に応じてサポートを継続します。「やりっぱなし」にしない設計です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label">FAQ</p>
+  <h2 class="section-title">よくある不安に、<br>答えます。</h2>
+  <p class="section-sub">
+    「聞くまでもないか」と思っていることが、<br>
+    一番大切な確認事項だったりします。
+  </p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">
+        <p class="faq-q-text">AIの知識がない社員でも参加できますか？</p>
+        <span class="faq-icon"></span>
+      </div>
+      <div class="faq-a">
+        <p class="faq-a-inner">はい。前提知識は不要です。「触ったことがない」「スマホは使えるけどPCは苦手」という方でも参加できる設計にしています。全員が同じスタートラインから始められます。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <p class="faq-q-text">1回の研修で効果は出ますか？</p>
+        <span class="faq-icon"></span>
+      </div>
+      <div class="faq-a">
+        <p class="faq-a-inner">1回で「使い始める」ことはできます。ただし、定着には継続的な実践が必要です。そのため、研修後のフォローアップも含めた設計を推奨しています。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <p class="faq-q-text">費用はどのくらいかかりますか？</p>
+        <span class="faq-icon"></span>
+      </div>
+      <div class="faq-a">
+        <p class="faq-a-inner">参加人数・実施回数・カスタマイズの範囲によって変わります。まず無料相談でヒアリングをさせてください。その後、具体的なお見積もりをご提示します。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <p class="faq-q-text">オンラインと対面、どちらに対応していますか？</p>
+        <span class="faq-icon"></span>
+      </div>
+      <div class="faq-a">
+        <p class="faq-a-inner">どちらにも対応しています。拠点が複数ある場合や、リモートワーク中心のチームにもオンラインで対応可能です。ご希望の形式をお聞かせください。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">
+        <p class="faq-q-text">特定のAIツールに限定されますか？</p>
+        <span class="faq-icon"></span>
+      </div>
+      <div class="faq-a">
+        <p class="faq-a-inner">いいえ。特定のツールに縛られない設計にしています。すでに社内で使っているツールがあれば、それに合わせてプログラムを組むことも可能です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section id="cta">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">まず、話を<br>聞いてみてください。</h2>
+  <p class="section-sub">
+    30分の無料相談から始められます。<br>
+    費用が発生するのは、ご依頼をいただいた後からです。
+  </p>
+  <div class="hero-buttons">
+    <a href="#" class="btn-primary">無料相談を申し込む</a>
+    <a href="#" class="btn-secondary">資料をダウンロード</a>
+  </div>
+  <p class="cta-note">相談後に契約を強要することはありません。</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">AI Training</p>
+  <div class="footer-links">
+    <a href="#">プライバシーポリシー</a>
+    <a href="#">お問い合わせ</a>
+  </div>
+  <p class="footer-copy">© 2025 AI Training. All rights reserved.</p>
+</footer>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(0,0,0,0.95)';
+    } else {
+      nav.style.background = 'rgba(0,0,0,0.7)';
+    }
+  });
+</script>
+
+</body>
+</html>

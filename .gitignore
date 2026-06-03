@@ -1,0 +1,33 @@
+# 環境変数・APIキー（絶対にGitHubに上げない）
+.env
+.env.local
+.env.*
+*.env
+secrets/
+credentials/
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# 顧客情報・機密ファイル（将来用）
+*.key
+*.pem
+*.p12
+
+# エディタ・IDE
+.vscode/settings.json
+*.swp
+*.swo
+
+# ログ
+*.log
