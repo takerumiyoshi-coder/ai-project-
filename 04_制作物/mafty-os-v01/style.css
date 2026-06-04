@@ -47,6 +47,31 @@ body {
   color: #475569;
 }
 
+.export-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: center;
+  background: none;
+  border: 1px solid #1e3a5f;
+  border-radius: 4px;
+  color: #475569;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.export-btn:hover {
+  border-color: #93c5fd;
+  color: #93c5fd;
+}
+
+.export-btn:active {
+  background: #1e3a5f;
+}
+
 /* ── Dashboard Section ── */
 .dashboard {
   flex-shrink: 0;
