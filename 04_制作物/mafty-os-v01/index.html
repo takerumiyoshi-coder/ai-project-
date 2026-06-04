@@ -11,7 +11,19 @@
   <header class="os-header">
     <h1 class="os-title">&#9650; MAFTY OS <span class="os-version">v0.3</span></h1>
     <p class="os-sub">マフティー・ナビーユ・エリン &mdash; AIチーム指令室</p>
-    <button id="export-btn" class="export-btn">EXPORT LOG</button>
+    <div class="export-dropdown" id="export-dropdown">
+      <button id="export-btn" class="export-btn">EXPORT LOG &#9660;</button>
+      <div class="export-panel" id="export-panel">
+        <label class="export-check-label"><input type="checkbox" id="exp-dashboard"> ダッシュボード</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-gigiTasks"> GIGI TASK BOARD</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-hathaway"> ハサウェイ</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-gigi"> ギギ</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-iram"> イラム</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-kenneth"> ケネス</label>
+        <label class="export-check-label"><input type="checkbox" id="exp-anaheim"> アナハイム</label>
+        <button id="export-run-btn" class="export-run-btn">エクスポート実行</button>
+      </div>
+    </div>
   </header>
 
   <!-- Dashboard Section -->

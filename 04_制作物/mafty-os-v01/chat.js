@@ -205,7 +205,33 @@ function initDashboard() {
 }
 
 // ── EXPORT LOG ──
-function exportLog() {
+function loadExportSelection() {
+  var defaults = { dashboard: true, gigiTasks: true, hathaway: true, gigi: true, iram: true, kenneth: true, anaheim: true };
+  try {
+    var saved = JSON.parse(localStorage.getItem('maftyos_export_selection'));
+    return saved ? Object.assign(defaults, saved) : defaults;
+  } catch (e) {
+    return defaults;
+  }
+}
+
+function saveExportSelection(sel) {
+  try {
+    localStorage.setItem('maftyos_export_selection', JSON.stringify(sel));
+  } catch (e) {
+    console.error('saveExportSelection error:', e);
+  }
+}
+
+function exportLog(sel) {
+  if (!sel) sel = loadExportSelection();
+  var allKeys = ['dashboard', 'gigiTasks', 'hathaway', 'gigi', 'iram', 'kenneth', 'anaheim'];
+  var hasAny = allKeys.some(function (k) { return sel[k]; });
+  if (!hasAny) {
+    alert('選択された項目がありません');
+    return;
+  }
+
   var now = new Date();
   var pad = function (n) { return String(n).padStart(2, '0'); };
   var dateStr = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
@@ -226,58 +252,68 @@ function exportLog() {
   lines.push('');
 
   // ── ダッシュボード
-  var dash = readRaw('maftyos_dashboard') || getDefaultDashboard();
+  if (sel.dashboard) {
+    var dash = readRaw('maftyos_dashboard') || getDefaultDashboard();
 
-  lines.push('## TODAY\'S COMMAND');
-  lines.push('**今日やること：** ' + (dash.todayCommand || '（未入力）'));
-  lines.push('**確認待ち：** ' + (dash.waiting || '（未入力）'));
-  lines.push('**今やらなくていいこと：** ' + (dash.later || '（未入力）'));
-  lines.push('**今日の一手：** ' + (dash.oneStep || '（未入力）'));
-  lines.push('');
+    lines.push('## TODAY\'S COMMAND');
+    lines.push('**今日やること：** ' + (dash.todayCommand || '（未入力）'));
+    lines.push('**確認待ち：** ' + (dash.waiting || '（未入力）'));
+    lines.push('**今やらなくていいこと：** ' + (dash.later || '（未入力）'));
+    lines.push('**今日の一手：** ' + (dash.oneStep || '（未入力）'));
+    lines.push('');
 
-  lines.push('## PROJECT STATUS');
-  lines.push('**進行中：** ' + (dash.projectRunning || '（未入力）'));
-  lines.push('**保留：** ' + (dash.projectHold || '（未入力）'));
-  lines.push('**次のマイルストーン：** ' + (dash.nextMilestone || '（未入力）'));
-  lines.push('');
+    lines.push('## PROJECT STATUS');
+    lines.push('**進行中：** ' + (dash.projectRunning || '（未入力）'));
+    lines.push('**保留：** ' + (dash.projectHold || '（未入力）'));
+    lines.push('**次のマイルストーン：** ' + (dash.nextMilestone || '（未入力）'));
+    lines.push('');
 
-  lines.push('## MAFTY STATUS');
-  var agentLabels = [
-    ['hathaway', 'ハサウェイ'],
-    ['gigi',     'ギギ'],
-    ['iram',     'イラム'],
-    ['kenneth',  'ケネス'],
-    ['anaheim',  'アナハイム']
-  ];
-  agentLabels.forEach(function (pair) {
-    lines.push('- ' + pair[1] + '：' + ((dash.maftyStatus && dash.maftyStatus[pair[0]]) || '待機中'));
-  });
-  lines.push('');
+    lines.push('## MAFTY STATUS');
+    var agentLabels = [
+      ['hathaway', 'ハサウェイ'],
+      ['gigi',     'ギギ'],
+      ['iram',     'イラム'],
+      ['kenneth',  'ケネス'],
+      ['anaheim',  'アナハイム']
+    ];
+    agentLabels.forEach(function (pair) {
+      lines.push('- ' + pair[1] + '：' + ((dash.maftyStatus && dash.maftyStatus[pair[0]]) || '待機中'));
+    });
+    lines.push('');
+  }
 
   // ── GIGI TASK BOARD
-  lines.push('## GIGI TASK BOARD');
-  var tasks = readRaw('maftyos_gigi_tasks') || [];
-  if (tasks.length === 0) {
-    lines.push('（タスクなし）');
-  } else {
-    tasks.forEach(function (t) {
-      lines.push('- [' + t.status + '] ' + t.text);
-    });
+  if (sel.gigiTasks) {
+    lines.push('## GIGI TASK BOARD');
+    var tasks = readRaw('maftyos_gigi_tasks') || [];
+    if (tasks.length === 0) {
+      lines.push('（タスクなし）');
+    } else {
+      tasks.forEach(function (t) {
+        lines.push('- [' + t.status + '] ' + t.text);
+      });
+    }
+    lines.push('');
   }
-  lines.push('');
-  lines.push('---');
-  lines.push('');
+
+  // ── 会話履歴セパレーター
+  var hasAgents = sel.hathaway || sel.gigi || sel.iram || sel.kenneth || sel.anaheim;
+  if (hasAgents) {
+    lines.push('---');
+    lines.push('');
+  }
 
   // ── 会話履歴
   var agentMeta = [
-    { id: 'hathaway', name: 'ハサウェイ・ノア' },
-    { id: 'gigi',     name: 'ギギ・アンダルシア' },
-    { id: 'iram',     name: 'イラム' },
-    { id: 'kenneth',  name: 'ケネス・スレッグ' },
-    { id: 'anaheim',  name: 'アナハイム' }
+    { id: 'hathaway', name: 'ハサウェイ・ノア',   key: 'hathaway' },
+    { id: 'gigi',     name: 'ギギ・アンダルシア', key: 'gigi' },
+    { id: 'iram',     name: 'イラム',             key: 'iram' },
+    { id: 'kenneth',  name: 'ケネス・スレッグ',   key: 'kenneth' },
+    { id: 'anaheim',  name: 'アナハイム',         key: 'anaheim' }
   ];
 
   agentMeta.forEach(function (agent) {
+    if (!sel[agent.key]) return;
     lines.push('## ' + agent.name + ' との会話');
     var history = readRaw('maftyos_' + agent.id) || [];
     if (history.length === 0) {
@@ -395,11 +431,66 @@ function renderGigiTasks() {
 // ── Initialize ──
 document.addEventListener('DOMContentLoaded', function () {
 
-  // EXPORT LOG
-  var exportBtn = document.getElementById('export-btn');
-  if (exportBtn) {
-    exportBtn.addEventListener('click', exportLog);
-  }
+  // EXPORT DROPDOWN
+  (function () {
+    var dropdown = document.getElementById('export-dropdown');
+    var btn      = document.getElementById('export-btn');
+    var panel    = document.getElementById('export-panel');
+    var runBtn   = document.getElementById('export-run-btn');
+    if (!btn || !panel) return;
+
+    var checkDefs = [
+      { id: 'exp-dashboard', key: 'dashboard' },
+      { id: 'exp-gigiTasks', key: 'gigiTasks' },
+      { id: 'exp-hathaway',  key: 'hathaway' },
+      { id: 'exp-gigi',      key: 'gigi' },
+      { id: 'exp-iram',      key: 'iram' },
+      { id: 'exp-kenneth',   key: 'kenneth' },
+      { id: 'exp-anaheim',   key: 'anaheim' }
+    ];
+
+    // localStorageから選択状態を復元
+    var sel = loadExportSelection();
+    checkDefs.forEach(function (def) {
+      var cb = document.getElementById(def.id);
+      if (cb) cb.checked = sel[def.key] !== false;
+    });
+
+    // ドロップダウン開閉
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = panel.classList.toggle('export-panel--open');
+      btn.classList.toggle('export-btn--open', isOpen);
+    });
+
+    // チェック変更時にlocalStorage保存
+    checkDefs.forEach(function (def) {
+      var cb = document.getElementById(def.id);
+      if (!cb) return;
+      cb.addEventListener('change', function () {
+        var s = loadExportSelection();
+        s[def.key] = cb.checked;
+        saveExportSelection(s);
+      });
+    });
+
+    // エクスポート実行
+    if (runBtn) {
+      runBtn.addEventListener('click', function () {
+        exportLog(loadExportSelection());
+        panel.classList.remove('export-panel--open');
+        btn.classList.remove('export-btn--open');
+      });
+    }
+
+    // パネル外クリックで閉じる
+    document.addEventListener('click', function (e) {
+      if (dropdown && !dropdown.contains(e.target)) {
+        panel.classList.remove('export-panel--open');
+        btn.classList.remove('export-btn--open');
+      }
+    });
+  })();
 
   // Initialize dashboard
   initDashboard();

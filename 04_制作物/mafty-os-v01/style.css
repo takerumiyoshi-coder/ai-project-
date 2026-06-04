@@ -47,10 +47,14 @@ body {
   color: #475569;
 }
 
-.export-btn {
+.export-dropdown {
   margin-left: auto;
   flex-shrink: 0;
   align-self: center;
+  position: relative;
+}
+
+.export-btn {
   background: none;
   border: 1px solid #1e3a5f;
   border-radius: 4px;
@@ -63,13 +67,65 @@ body {
   transition: border-color 0.15s, color 0.15s;
 }
 
-.export-btn:hover {
+.export-btn:hover,
+.export-btn.export-btn--open {
   border-color: #93c5fd;
   color: #93c5fd;
 }
 
-.export-btn:active {
-  background: #1e3a5f;
+.export-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #131e30;
+  border: 1px solid #1e3a5f;
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 180px;
+  z-index: 100;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.export-panel.export-panel--open {
+  display: flex;
+}
+
+.export-check-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.export-check-label:hover {
+  color: #e2e8f0;
+}
+
+.export-check-label input[type="checkbox"] {
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.export-run-btn {
+  margin-top: 4px;
+  background: #1d4ed8;
+  color: #bfdbfe;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 5px 0;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.export-run-btn:hover {
+  filter: brightness(1.2);
 }
 
 /* ── Dashboard Section ── */
