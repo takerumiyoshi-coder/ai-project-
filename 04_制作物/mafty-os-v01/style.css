@@ -176,6 +176,174 @@ body {
   border-color: #15803d;
 }
 
+/* ── GIGI TASK BOARD ── */
+.gigi-tasks {
+  flex-shrink: 0;
+  background: #0d1520;
+  border-top: 2px solid #a855f7;
+  border-bottom: 1px solid #1e293b;
+  padding: 10px 16px;
+  max-height: 26vh;
+  overflow-y: auto;
+}
+
+.gigi-tasks::-webkit-scrollbar {
+  width: 3px;
+}
+
+.gigi-tasks::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 2px;
+}
+
+.gigi-tasks-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.gigi-tasks-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #c084fc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gigi-tasks-sub {
+  font-size: 0.65rem;
+  color: #475569;
+}
+
+.gigi-tasks-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.gigi-task-input {
+  flex: 1;
+  background: #1e293b;
+  border: 1px solid #4c1d95;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  transition: border-color 0.15s;
+}
+
+.gigi-task-input:focus {
+  outline: none;
+  border-color: #a855f7;
+}
+
+.gigi-task-input::placeholder {
+  color: #2d3f55;
+}
+
+.gigi-task-add-btn {
+  flex-shrink: 0;
+  background: #6b21a8;
+  color: #e9d5ff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.gigi-task-add-btn:hover {
+  filter: brightness(1.2);
+}
+
+.gigi-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gigi-tasks-empty {
+  font-size: 0.72rem;
+  color: #334155;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.gigi-task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #131e30;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.task-status-btn {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  padding: 3px 10px;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  background: #1e293b;
+  color: #94a3b8;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s;
+  min-width: 62px;
+  text-align: center;
+}
+
+.task-status-btn:hover {
+  border-color: #475569;
+}
+
+.task-status-btn.task-status--working {
+  background: #3b82f6;
+  color: #dbeafe;
+  border-color: #1d4ed8;
+}
+
+.task-status-btn.task-status--done {
+  background: #22c55e;
+  color: #dcfce7;
+  border-color: #15803d;
+}
+
+.gigi-task-text {
+  flex: 1;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.gigi-task-text--done {
+  color: #475569;
+  text-decoration: line-through;
+}
+
+.gigi-task-delete-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #2d3f55;
+  border-radius: 4px;
+  color: #3d5470;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.gigi-task-delete-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
 /* ── 5 Columns layout ── */
 .columns {
   display: flex;

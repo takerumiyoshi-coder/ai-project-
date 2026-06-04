@@ -204,6 +204,92 @@ function initDashboard() {
   });
 }
 
+// ── GIGI TASK BOARD ──
+function loadGigiTasks() {
+  try {
+    return JSON.parse(localStorage.getItem('maftyos_gigi_tasks')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveGigiTasks(tasks) {
+  try {
+    localStorage.setItem('maftyos_gigi_tasks', JSON.stringify(tasks));
+  } catch (e) {
+    console.error('saveGigiTasks error:', e);
+  }
+}
+
+function addGigiTask(text) {
+  if (!text.trim()) return;
+  var tasks = loadGigiTasks();
+  tasks.push({ id: Date.now(), text: text.trim(), status: '未着手' });
+  saveGigiTasks(tasks);
+  renderGigiTasks();
+}
+
+function updateGigiTaskStatus(id) {
+  var statuses = ['未着手', '作業中', '完了'];
+  var tasks = loadGigiTasks().map(function (t) {
+    if (t.id === id) {
+      var idx = statuses.indexOf(t.status);
+      t.status = statuses[(idx + 1) % statuses.length];
+    }
+    return t;
+  });
+  saveGigiTasks(tasks);
+  renderGigiTasks();
+}
+
+function deleteGigiTask(id) {
+  saveGigiTasks(loadGigiTasks().filter(function (t) { return t.id !== id; }));
+  renderGigiTasks();
+}
+
+function getTaskStatusClass(status) {
+  if (status === '作業中') return 'task-status--working';
+  if (status === '完了') return 'task-status--done';
+  return '';
+}
+
+function renderGigiTasks() {
+  var list = document.getElementById('gigi-task-list');
+  if (!list) return;
+  var tasks = loadGigiTasks();
+  list.innerHTML = '';
+  if (tasks.length === 0) {
+    var empty = document.createElement('p');
+    empty.className = 'gigi-tasks-empty';
+    empty.textContent = 'タスクはありません';
+    list.appendChild(empty);
+    return;
+  }
+  tasks.forEach(function (task) {
+    var item = document.createElement('div');
+    item.className = 'gigi-task-item';
+
+    var statusBtn = document.createElement('button');
+    statusBtn.className = 'task-status-btn ' + getTaskStatusClass(task.status);
+    statusBtn.textContent = task.status;
+    statusBtn.addEventListener('click', function () { updateGigiTaskStatus(task.id); });
+
+    var textEl = document.createElement('span');
+    textEl.className = 'gigi-task-text' + (task.status === '完了' ? ' gigi-task-text--done' : '');
+    textEl.textContent = task.text;
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'gigi-task-delete-btn';
+    delBtn.textContent = '削除';
+    delBtn.addEventListener('click', function () { deleteGigiTask(task.id); });
+
+    item.appendChild(statusBtn);
+    item.appendChild(textEl);
+    item.appendChild(delBtn);
+    list.appendChild(item);
+  });
+}
+
 // ── Initialize ──
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -266,6 +352,24 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.className = 'status-btn ' + getStatusClass(nextStatus);
     });
   });
+
+  // GIGI TASK BOARD
+  renderGigiTasks();
+  var gigiInput = document.getElementById('gigi-task-input');
+  var gigiAddBtn = document.getElementById('gigi-task-add-btn');
+  if (gigiInput && gigiAddBtn) {
+    gigiAddBtn.addEventListener('click', function () {
+      addGigiTask(gigiInput.value);
+      gigiInput.value = '';
+    });
+    gigiInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addGigiTask(gigiInput.value);
+        gigiInput.value = '';
+      }
+    });
+  }
 
   // Load all histories
   AGENTS.forEach(function (agent) {
