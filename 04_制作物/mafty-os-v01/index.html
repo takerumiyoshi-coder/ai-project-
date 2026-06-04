@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAFTY OS v0.1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="os-header">
+    <h1 class="os-title">&#9650; MAFTY OS <span class="os-version">v0.2</span></h1>
+    <p class="os-sub">マフティー・ナビーユ・エリン &mdash; AIチーム指令室</p>
+  </header>
+
+  <!-- Dashboard Section -->
+  <section class="dashboard">
+    <div class="dashboard-grid">
+      <!-- TODAY'S COMMAND -->
+      <div class="dashboard-panel">
+        <h3 class="dashboard-title">TODAY'S COMMAND</h3>
+        <div class="dashboard-item">
+          <label>今日やること</label>
+          <textarea id="dash-today-command" placeholder="今日の指令を入力…" rows="2"></textarea>
+        </div>
+        <div class="dashboard-item">
+          <label>確認待ち</label>
+          <textarea id="dash-waiting" placeholder="確認待ち中の項目…" rows="2"></textarea>
+        </div>
+        <div class="dashboard-item">
+          <label>今やらなくていいこと</label>
+          <textarea id="dash-later" placeholder="今は後回し…" rows="2"></textarea>
+        </div>
+        <div class="dashboard-item">
+          <label>今日の一手</label>
+          <textarea id="dash-one-step" placeholder="今すぐやる最小一手…" rows="2"></textarea>
+        </div>
+      </div>
+
+      <!-- PROJECT STATUS -->
+      <div class="dashboard-panel">
+        <h3 class="dashboard-title">PROJECT STATUS</h3>
+        <div class="dashboard-item">
+          <label>進行中</label>
+          <textarea id="dash-project-running" placeholder="進行中のプロジェクト…" rows="2"></textarea>
+        </div>
+        <div class="dashboard-item">
+          <label>保留</label>
+          <textarea id="dash-project-hold" placeholder="一時保留中…" rows="2"></textarea>
+        </div>
+        <div class="dashboard-item">
+          <label>次のマイルストーン</label>
+          <textarea id="dash-next-milestone" placeholder="次の到達点…" rows="2"></textarea>
+        </div>
+      </div>
+
+      <!-- MAFTY STATUS -->
+      <div class="dashboard-panel">
+        <h3 class="dashboard-title">MAFTY STATUS</h3>
+        <div class="mafty-status-list">
+          <div class="mafty-status-item">
+            <span class="agent-name">ハサウェイ</span>
+            <button class="status-btn" data-agent="hathaway" data-status="待機中">待機中</button>
+          </div>
+          <div class="mafty-status-item">
+            <span class="agent-name">ギギ</span>
+            <button class="status-btn" data-agent="gigi" data-status="待機中">待機中</button>
+          </div>
+          <div class="mafty-status-item">
+            <span class="agent-name">イラム</span>
+            <button class="status-btn" data-agent="iram" data-status="待機中">待機中</button>
+          </div>
+          <div class="mafty-status-item">
+            <span class="agent-name">ケネス</span>
+            <button class="status-btn" data-agent="kenneth" data-status="待機中">待機中</button>
+          </div>
+          <div class="mafty-status-item">
+            <span class="agent-name">アナハイム</span>
+            <button class="status-btn" data-agent="anaheim" data-status="待機中">待機中</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="columns">
+
+    <!-- ハサウェイ -->
+    <section class="agent-col col--hathaway">
+      <div class="col-header">
+        <div class="col-header-top">
+          <code class="col-agent-id">hathaway-noa-commander</code>
+          <button class="clear-btn" data-agent="hathaway">クリア</button>
+        </div>
+        <h2 class="col-name">ハサウェイ・ノア</h2>
+        <span class="col-badge">司令塔</span>
+      </div>
+      <div class="chat-history" id="history-hathaway"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="input-hathaway"
+          placeholder="ハサウェイに相談する…&#10;Enter で送信 / Shift+Enter で改行"></textarea>
+        <button class="send-btn" data-agent="hathaway">送信</button>
+      </div>
+    </section>
+
+    <!-- ギギ -->
+    <section class="agent-col col--gigi">
+      <div class="col-header">
+        <div class="col-header-top">
+          <code class="col-agent-id">gigi-andalusia-secretary</code>
+          <button class="clear-btn" data-agent="gigi">クリア</button>
+        </div>
+        <h2 class="col-name">ギギ・アンダルシア</h2>
+        <span class="col-badge">秘書</span>
+      </div>
+      <div class="chat-history" id="history-gigi"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="input-gigi"
+          placeholder="ギギに相談する…&#10;Enter で送信 / Shift+Enter で改行"></textarea>
+        <button class="send-btn" data-agent="gigi">送信</button>
+      </div>
+    </section>
+
+    <!-- イラム -->
+    <section class="agent-col col--iram">
+      <div class="col-header">
+        <div class="col-header-top">
+          <code class="col-agent-id">iram-scout</code>
+          <button class="clear-btn" data-agent="iram">クリア</button>
+        </div>
+        <h2 class="col-name">イラム</h2>
+        <span class="col-badge">偵察・分析</span>
+      </div>
+      <div class="chat-history" id="history-iram"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="input-iram"
+          placeholder="イラムに相談する…&#10;Enter で送信 / Shift+Enter で改行"></textarea>
+        <button class="send-btn" data-agent="iram">送信</button>
+      </div>
+    </section>
+
+    <!-- ケネス -->
+    <section class="agent-col col--kenneth">
+      <div class="col-header">
+        <div class="col-header-top">
+          <code class="col-agent-id">kenneth-sleg-communicator</code>
+          <button class="clear-btn" data-agent="kenneth">クリア</button>
+        </div>
+        <h2 class="col-name">ケネス・スレッグ</h2>
+        <span class="col-badge">伝達・翻訳</span>
+      </div>
+      <div class="chat-history" id="history-kenneth"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="input-kenneth"
+          placeholder="ケネスに相談する…&#10;Enter で送信 / Shift+Enter で改行"></textarea>
+        <button class="send-btn" data-agent="kenneth">送信</button>
+      </div>
+    </section>
+
+    <!-- アナハイム -->
+    <section class="agent-col col--anaheim">
+      <div class="col-header">
+        <div class="col-header-top">
+          <code class="col-agent-id">anaheim-creator</code>
+          <button class="clear-btn" data-agent="anaheim">クリア</button>
+        </div>
+        <h2 class="col-name">アナハイム</h2>
+        <span class="col-badge">制作</span>
+      </div>
+      <div class="chat-history" id="history-anaheim"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="input-anaheim"
+          placeholder="アナハイムに相談する…&#10;Enter で送信 / Shift+Enter で改行"></textarea>
+        <button class="send-btn" data-agent="anaheim">送信</button>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="mafty-debug" class="mafty-debug"></div>
+
+  <script src="agents.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
